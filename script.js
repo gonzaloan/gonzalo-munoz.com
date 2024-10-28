@@ -73,7 +73,7 @@ class CVGame {
         modal.innerHTML = `
             <div class="reset-content">
                 <a href="https://www.linkedin.com/in/mmgonzalo" target="_blank">
-                    <img src="./img/linkedin.gif" alt="Lets Contact" class="win-gif">
+                    <img src="./img/linkedin.png" alt="Lets Contact" class="win-gif">
                 </a>
                 <p>The end!</p>
                 <button class="restart-button" onclick="location.reload()">Restart</button>
