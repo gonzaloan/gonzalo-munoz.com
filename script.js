@@ -16,7 +16,7 @@ class CVGame {
             { title: "About me", content: "Hi! My name is Gonzalo" },
             { title: "Experience", content: "Senior Software Engineer - Certified AWS Solutions Architect" },
             { title: "Skills", content: "Java, Angular, Golang, AWS, Python" },
-            { title: "Certifications", content: "5x AWS Certified, GCP Cloud Engineer, OCA 8" },
+            { title: "Certifications", content: "6x AWS Certified, GCP Cloud Engineer, OCA 8" },
             { title: "Contact", content: "gonzaloan.munoz@gmail.com" }
         ];
 
@@ -76,16 +76,11 @@ class CVGame {
                     <img src="./img/linkedin.gif" alt="Lets Contact" class="win-gif">
                 </a>
                 <p>The end!</p>
-                <button class="restart-button">Restart</button>
+                <button class="restart-button" onclick="location.reload()">Restart</button>
             </div>
         `;
         this.container.appendChild(modal);
         this.resetModal = modal;
-
-        const linkedinButton = modal.querySelector('.restart-button');
-        linkedinButton.addEventListener('click', () => {
-            window.location.href = 'gonzalo-munoz.com';
-        });
     }
     hitBox(box, index) {
         box.textContent = '!';
@@ -100,9 +95,10 @@ class CVGame {
             infoContent.classList.remove('active');
         }, 3000);
 
-        // Check if all boxes are hit
         if (this.coins === this.totalBoxes) {
-            this.showResetModal();
+            setTimeout(() => {
+                this.showResetModal();
+            }, 6000);
         }
     }
 
