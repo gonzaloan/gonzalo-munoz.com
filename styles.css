@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #6b8cff;
+    font-family: 'Press Start 2P', cursive;
+    overflow: hidden;
+    height: 100vh;
+}
+
+#game-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(
+        #6b8cff 0%,
+        #6b8cff 60%,
+        #00a800 60%,
+        #00a800 80%,
+        #884800 80%,
+        #884800 100%
+    );
+}
+
+#mario {
+    position: absolute;
+    width: 50px;
+    height: 60px;
+    bottom: 20%;
+    left: 100px;
+    z-index: 100;
+    transition: transform 0.1s;
+    background-image: url('./img/mario.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+#mario.jumping {
+    background-image: url('./img/mario-jumping.png');
+  }
+.facing-right {
+    transform: scaleX(1);
+}
+
+.facing-left {
+    transform: scaleX(-1);
+}
+
+.info-box {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: #e7a945;
+    border: 4px solid #874f0c;
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    bottom: 45%;
+    transition: all 0.3s ease;
+}
+
+.info-box.hit {
+    background: #736f6f;
+    animation: boxHit 0.3s ease;
+}
+
+@keyframes boxHit {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+}
+
+.info-content {
+    display: none;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    min-width: 300px;
+    text-align: center;
+}
+
+.info-content.active {
+    display: block;
+    animation: popIn 0.5s ease;
+}
+
+@keyframes popIn {
+    0% { transform: translate(-50%, -60%); opacity: 0; }
+    100% { transform: translate(-50%, -50%); opacity: 1; }
+}
+
+.coins {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.coin-icon {
+    width: 20px;
+    height: 20px;
+    background: #ffd700;
+    border-radius: 50%;
+    border: 2px solid #b8860b;
+}
+
+.cloud {
+    position: absolute;
+    background: white;
+    border-radius: 20px;
+    opacity: 0.8;
+    animation: floatCloud linear infinite;
+}
+
+@keyframes floatCloud {
+    from { left: -100px; }
+    to { left: 100%; }
+}
+
+#jump-hint {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    opacity: 0.8;
+}
+
+#mobile-controls {
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+#left-arrow, #right-arrow {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    pointer-events: auto;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+#left-arrow:active, #right-arrow:active {
+    background: rgba(255, 255, 255, 0.5);
+}
