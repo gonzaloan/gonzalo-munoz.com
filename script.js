@@ -9,6 +9,7 @@ class CVGame {
         this.velocityY = 0;
         this.gravity = 0.6;
         this.jumpForce = -7;
+        this.totalBoxes = 5;
         this.boxes = [];
         this.clouds = [];
         this.information = [
@@ -18,8 +19,7 @@ class CVGame {
             { title: "Certifications", content: "5x AWS Certified, GCP Cloud Engineer, OCA 8" },
             { title: "Contact", content: "gonzaloan.munoz@gmail.com" }
         ];
-         
-        //to keys 
+
         this.leftButton = document.getElementById('left-arrow');
         this.rightButton = document.getElementById('right-arrow');
         this.leftInterval = null;
@@ -28,21 +28,32 @@ class CVGame {
     }
 
     init() {
+        this.createGameContent();
         this.createBoxes();
         this.createClouds();
+        this.createResetModal();
         this.setupEventListeners();
         this.setupMobileControls();
         this.setupBoxInteraction();
         this.gameLoop();
     }
+    createGameContent() {
+        const gameContent = document.createElement('div');
+        gameContent.className = 'game-content';
+        this.container.appendChild(gameContent);
+        this.gameContent = gameContent;
 
+        const boxesContainer = document.createElement('div');
+        boxesContainer.className = 'boxes-container';
+        this.gameContent.appendChild(boxesContainer);
+        this.boxesContainer = boxesContainer;
+    }
     createBoxes() {
-        this.information.forEach((info, index) => {
+        this.information.forEach((info) => {
             const box = document.createElement('div');
             box.className = 'info-box';
             box.textContent = '?';
-            box.style.left = `${200 + (index * 200)}px`;
-            this.container.appendChild(box);
+            this.boxesContainer.appendChild(box);
             this.boxes.push(box);
 
             const content = document.createElement('div');
@@ -55,6 +66,51 @@ class CVGame {
         });
     }
 
+    createResetModal() {
+        const modal = document.createElement('div');
+        modal.className = 'reset-modal';
+        modal.style.display = 'none';
+        modal.innerHTML = `
+            <div class="reset-content">
+                <a href="https://www.linkedin.com/in/mmgonzalo" target="_blank">
+                    <img src="./img/linkedin.gif" alt="Lets Contact" class="win-gif">
+                </a>
+                <p>The end!</p>
+                <button class="restart-button">Restart</button>
+            </div>
+        `;
+        this.container.appendChild(modal);
+        this.resetModal = modal;
+
+        const linkedinButton = modal.querySelector('.restart-button');
+        linkedinButton.addEventListener('click', () => {
+            window.location.href = 'gonzalo-munoz.com';
+        });
+    }
+    hitBox(box, index) {
+        box.textContent = '!';
+        box.classList.add('hit');
+        this.coins += 1;
+        this.coinCount.textContent = this.coins;
+
+        const infoContent = document.querySelectorAll('.info-content')[index];
+        infoContent.classList.add('active');
+
+        setTimeout(() => {
+            infoContent.classList.remove('active');
+        }, 3000);
+
+        // Check if all boxes are hit
+        if (this.coins === this.totalBoxes) {
+            this.showResetModal();
+        }
+    }
+
+    showResetModal() {
+        this.resetModal.style.display = 'flex';
+        // Opcional: Detener el movimiento del personaje
+        this.stopMoving();
+    }
     createClouds() {
         for (let i = 0; i < 3; i++) {
             const cloud = document.createElement('div');
@@ -63,14 +119,13 @@ class CVGame {
             cloud.style.height = '40px';
             cloud.style.top = `${50 + Math.random() * 100}px`;
             cloud.style.animationDuration = `${20 + Math.random() * 10}s`;
-            this.container.appendChild(cloud);
+            this.gameContent.appendChild(cloud);
             this.clouds.push(cloud);
         }
     }
 
     setupEventListeners() {
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
-        document.addEventListener('keyup', this.handleKeyUp.bind(this));
     }
 
     handleKeyDown(e) {
@@ -83,29 +138,37 @@ class CVGame {
         }
     }
 
-    handleKeyUp(e) {
-        if (e.code === 'ArrowRight' || e.code === 'ArrowLeft' || 
-            e.code === 'KeyD' || e.code === 'KeyA') {
-            this.stopMoving();
-        }
-    }
     moveLeft() {
-        this.position -= 20;
-        if (this.position < 0) this.position = 0;
+        const containerRect = this.container.getBoundingClientRect();
+        const marioRect = this.mario.getBoundingClientRect();
+        const minPosition = 0;
+
+        this.position = Math.max(minPosition, this.position - 20);
         this.mario.classList.remove('facing-right');
         this.mario.classList.add('facing-left');
         this.mario.style.left = `${this.position}px`;
         this.checkCollisions();
+
+        if (marioRect.left < containerRect.left) {
+            this.position = 0;
+            this.mario.style.left = `${this.position}px`;
+        }
     }
 
     moveRight() {
-        this.position += 20;
-        const maxPosition = this.container.scrollWidth - this.mario.offsetWidth;
-        if (this.position > maxPosition) this.position = maxPosition;
+        const containerRect = this.container.getBoundingClientRect();
+        const marioRect = this.mario.getBoundingClientRect();
+        const maxPosition = containerRect.width - marioRect.width;
+
+        this.position = Math.min(maxPosition, this.position + 20);
         this.mario.classList.remove('facing-left');
         this.mario.classList.add('facing-right');
         this.mario.style.left = `${this.position}px`;
         this.checkCollisions();
+        if (marioRect.right > containerRect.right) {
+            this.position = maxPosition;
+            this.mario.style.left = `${this.position}px`;
+        }
     }
 
     jump() {
@@ -138,22 +201,7 @@ class CVGame {
                 rect1.bottom < rect2.top || 
                 rect1.top > rect2.bottom);
     }
-
-    hitBox(box, index) {
-        box.textContent = '!';
-        box.classList.add('hit');
-        this.coins += 1;
-        this.coinCount.textContent = this.coins;
-        
-        const infoContent = document.querySelectorAll('.info-content')[index];
-        infoContent.classList.add('active');
-        
-        setTimeout(() => {
-            infoContent.classList.remove('active');
-        }, 3000);
-    }
     setupMobileControls() {
-        // Control táctil izquierdo
         this.leftButton.addEventListener('touchstart', (e) => {
             e.preventDefault();
             this.leftInterval = setInterval(() => this.moveLeft(), 16);
@@ -162,7 +210,6 @@ class CVGame {
             clearInterval(this.leftInterval);
         });
 
-        // Control táctil derecho
         this.rightButton.addEventListener('touchstart', (e) => {
             e.preventDefault();
             this.rightInterval = setInterval(() => this.moveRight(), 16);
@@ -171,7 +218,6 @@ class CVGame {
             clearInterval(this.rightInterval);
         });
 
-        // Soporte para clicks (para pruebas en desktop)
         this.leftButton.addEventListener('mousedown', () => {
             this.leftInterval = setInterval(() => this.moveLeft(), 16);
         });
@@ -181,7 +227,6 @@ class CVGame {
         this.leftButton.addEventListener('mouseleave', () => {
             clearInterval(this.leftInterval);
         });
-
         this.rightButton.addEventListener('mousedown', () => {
             this.rightInterval = setInterval(() => this.moveRight(), 16);
         });
@@ -194,15 +239,12 @@ class CVGame {
     }
 
     setupBoxInteraction() {
-        this.boxes.forEach((box, index) => {
+        this.boxes.forEach((box) => {
             box.addEventListener('click', () => {
                 const boxRect = box.getBoundingClientRect();
                 const marioRect = this.mario.getBoundingClientRect();
-                
                 if (Math.abs(marioRect.x - boxRect.x) < 100) {
                     this.jump();
-                    
-
                     setTimeout(() => {
                         this.checkCollisions();
                     }, 100);
@@ -229,16 +271,13 @@ class CVGame {
             this.velocityY += this.gravity;
             let currentBottom = parseInt(this.mario.style.bottom || '20');
             currentBottom = parseFloat(currentBottom) - this.velocityY;
-            
             if (currentBottom <= 20) {
                 currentBottom = 20;
                 this.isJumping = false;
                 this.velocityY = 0;
             }
-            
             this.mario.style.bottom = `${currentBottom}%`;
         }
-        
         this.checkCollisions();
         requestAnimationFrame(this.gameLoop.bind(this));
     }
