@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+:root {
+    --sky-color: #5C94FC;
+    --mountain-color-1: #00B800;
+    --mountain-color-2: #00A000;
+    --ground-color-1: #F8B800;
+    --ground-color-2: #C88800;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +15,7 @@
 }
 
 body {
-    background: #6b8cff;
+    background: var(--sky-color);
     font-family: 'Press Start 2P', cursive;
     overflow: hidden;
     height: 100vh;
@@ -20,17 +28,50 @@ body {
     width: 100%;
     height: 100vh;
     background: linear-gradient(
-            #6b8cff 0%,
-            #6b8cff 60%,
-            #00a800 60%,
-            #00a800 80%,
-            #884800 80%,
-            #884800 100%
+            var(--sky-color) 0%,
+            var(--sky-color) 60%,
+            var(--mountain-color-1) 60%,
+            var(--mountain-color-1) 80%,
+            var(--ground-color-1) 80%,
+            var(--ground-color-1) 100%
     );
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#game-container::before {
+    content: '';
+    position: absolute;
+    bottom: 20%;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background:
+            radial-gradient(circle at 30% 100%, var(--mountain-color-2) 20px, transparent 21px),
+            radial-gradient(circle at 70% 100%, var(--mountain-color-2) 20px, transparent 21px),
+            radial-gradient(circle at 90% 100%, var(--mountain-color-2) 20px, transparent 21px),
+            radial-gradient(circle at 10% 100%, var(--mountain-color-2) 20px, transparent 21px),
+            radial-gradient(circle at 50% 100%, var(--mountain-color-2) 20px, transparent 21px);
+    background-size: 200px 60px;
+    background-repeat: repeat-x;
+    z-index: 1;
+}
+
+#game-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background:
+            radial-gradient(circle at 30% 100%, var(--ground-color-2) 15px, transparent 16px),
+            radial-gradient(circle at 70% 100%, var(--ground-color-2) 15px, transparent 16px);
+    background-size: 100px 40px;
+    background-repeat: repeat-x;
+    z-index: 1;
 }
 
 .game-content {
@@ -45,9 +86,32 @@ body {
     position: absolute;
     background: white;
     border-radius: 20px;
-    opacity: 0.8;
+    opacity: 0.9;
     animation: floatCloud linear infinite;
     z-index: 1;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.cloud::before,
+.cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 50%;
+    height: 100%;
+    top: -50%;
+    left: 25%;
+}
+
+.cloud::after {
+    width: 30%;
+    height: 60%;
+    top: -30%;
+    left: 10%;
 }
 
 @keyframes floatCloud {
@@ -58,7 +122,7 @@ body {
 #mario {
     position: absolute;
     width: 50px;
-    height: 60px;
+    height: 80px;
     bottom: 20%;
     left: 100px;
     z-index: 100;
@@ -90,13 +154,14 @@ body {
     left: 50%;
     transform: translateX(-50%);
     padding: 0 20px;
+    z-index: 2;
 }
 
 .info-box {
     width: 50px;
     height: 50px;
-    background: #e7a945;
-    border: 4px solid #874f0c;
+    background: linear-gradient(135deg, #FED049 0%, #FDB833 100%);
+    border: 4px solid #B67B11;
     color: white;
     font-size: 24px;
     display: flex;
@@ -104,18 +169,26 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    z-index: 2;
+    box-shadow: 0 4px 0 #8B5E0D, 0 6px 10px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.info-box::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    height: 10px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
 }
 
 .info-box.hit {
-    background: #736f6f;
+    background: linear-gradient(135deg, #A8A8A8 0%, #888888 100%);
+    box-shadow: 0 2px 0 #666;
+    transform: translateY(2px);
     animation: boxHit 0.3s ease;
-}
-
-@keyframes boxHit {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0); }
 }
 
 .info-content {
@@ -124,10 +197,11 @@ body {
     top: 25%;
     left: 50%;
     transform: translate(-50%, 0);
-    background: white;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F0F0 100%);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 4px solid #B67B11;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     z-index: 1000;
     width: 90%;
     max-width: 500px;
@@ -139,19 +213,17 @@ body {
     animation: popIn 0.5s ease;
 }
 
-@keyframes popIn {
-    0% { transform: translate(-50%, -20px); opacity: 0; }
-    100% { transform: translate(-50%, 0); opacity: 1; }
-}
-
 .info-content h2 {
     font-size: 14px;
     margin-bottom: 10px;
+    color: #333;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
 }
 
 .info-content p {
     font-size: 12px;
     line-height: 1.4;
+    color: #666;
 }
 
 .coins {
@@ -164,14 +236,23 @@ body {
     align-items: center;
     gap: 10px;
     z-index: 1000;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.3);
 }
 
 .coin-icon {
     width: 20px;
     height: 20px;
-    background: #ffd700;
+    background: linear-gradient(135deg, #FFD700 0%, #FFC000 100%);
     border-radius: 50%;
-    border: 2px solid #b8860b;
+    border: 2px solid #B8860B;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    animation: coinSpin 1s infinite;
+}
+
+@keyframes coinSpin {
+    0% { transform: rotateY(0deg); }
+    50% { transform: rotateY(90deg); }
+    100% { transform: rotateY(180deg); }
 }
 
 #mobile-controls {
@@ -188,8 +269,8 @@ body {
 #left-arrow, #right-arrow {
     width: 70px;
     height: 70px;
-    background: rgba(255, 255, 255, 0.5);
-    border: 3px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.7);
+    border: 3px solid rgba(255, 255, 255, 0.9);
     border-radius: 50%;
     font-size: 30px;
     color: white;
@@ -198,19 +279,93 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
     -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.2);
 }
 
-#left-arrow:active, #right-arrow:active {
-    background: rgba(255, 255, 255, 0.7);
+#left-arrow:active,
+#right-arrow:active {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-#jump-hint {
+.reset-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
     display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.reset-content {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F0F0 100%);
+    padding: 20px;
+    border-radius: 10px;
+    border: 4px solid #B67B11;
+    text-align: center;
+    max-width: 90%;
+    width: 300px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.win-gif {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.reset-content p {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #333;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+}
+
+.restart-button {
+    background: linear-gradient(135deg, #0077b5 0%, #005f8e 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 0 #004b70;
+}
+
+.restart-button:hover {
+    background: linear-gradient(135deg, #005f8e 0%, #004b70 100%);
+}
+
+.restart-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #004b70;
 }
 
 @media (max-width: 768px) {
+    #mario {
+        scale: 1.5;
+    }
+
+    .facing-right {
+        transform: scaleX(1) scale(1.5);
+    }
+
+    .facing-left {
+        transform: scaleX(-1) scale(1.5);
+    }
+
     .boxes-container {
         gap: 80px;
         padding: 0 10px;
@@ -220,11 +375,6 @@ body {
         width: 40px;
         height: 40px;
         font-size: 20px;
-    }
-
-    #mario {
-        width: 40px;
-        height: 48px;
     }
 
     .coins {
@@ -241,6 +391,25 @@ body {
     .info-content {
         top: 20%;
         padding: 15px;
+    }
+
+    .reset-content {
+        width: 280px;
+        padding: 15px;
+    }
+
+    .win-gif {
+        width: 120px;
+        height: 120px;
+    }
+
+    .reset-content p {
+        font-size: 12px;
+    }
+
+    .restart-button {
+        font-size: 10px;
+        padding: 8px 16px;
     }
 }
 
@@ -262,73 +431,110 @@ body {
     }
 }
 
-.reset-modal {
+/* Header Styles */
+.game-header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: none;
-    justify-content: center;
-    align-items: center;
+    background: linear-gradient(to bottom,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.5) 100%);
+    padding: 10px 0;
     z-index: 2000;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-.reset-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 90%;
-    width: 300px;
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
 }
 
-.win-gif {
-    width: 150px;
-    height: 150px;
-    margin-bottom: 15px;
+.header-logo {
+    height: 40px;
+    width: auto;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
 }
-
-.reset-content p {
-    font-size: 14px;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.restart-button {
-    background: #0077b5;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+.snes-button {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #8B4513;
     font-family: 'Press Start 2P', cursive;
     font-size: 12px;
-    cursor: pointer;
-    transition: background 0.3s;
+    padding: 8px 16px;
+    border: 3px solid #8B4513;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 0 #5C2D0E;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-.restart-button:hover {
-    background: #005f8e;
+.snes-button::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    height: 50%;
+    background: linear-gradient(to bottom,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0) 100%);
+    border-radius: 3px 3px 0 0;
+    pointer-events: none;
+}
+
+.snes-button:hover {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #5C2D0E;
+    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+}
+
+.snes-button:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+@keyframes boxHit {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes popIn {
+    0% { transform: translate(-50%, -20px); opacity: 0; }
+    100% { transform: translate(-50%, 0); opacity: 1; }
 }
 
 @media (max-width: 768px) {
-    .reset-content {
-        width: 280px;
-        padding: 15px;
+    .header-content {
+        padding: 0 15px;
     }
 
-    .win-gif {
-        width: 120px;
-        height: 120px;
+    .header-logo {
+        height: 30px;
     }
 
-    .reset-content p {
-        font-size: 12px;
-    }
-
-    .restart-button {
+    .snes-button {
         font-size: 10px;
-        padding: 8px 16px;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-logo {
+        height: 25px;
+    }
+
+    .snes-button {
+        font-size: 8px;
+        padding: 5px 10px;
     }
 }
