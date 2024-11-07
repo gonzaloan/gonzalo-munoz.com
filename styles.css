@@ -355,15 +355,15 @@ body {
 
 @media (max-width: 768px) {
     #mario {
-        scale: 1.5;
+        scale: 1;
     }
 
     .facing-right {
-        transform: scaleX(1) scale(1.5);
+        transform: scaleX(1) scale(1);
     }
 
     .facing-left {
-        transform: scaleX(-1) scale(1.5);
+        transform: scaleX(-1) scale(1);
     }
 
     .boxes-container {
