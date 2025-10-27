@@ -92,11 +92,11 @@ This project follows **Clean Architecture** and **SOLID principles** for maintai
 
 ### Key Architecture Features
 
-- ✅ **Single Responsibility**: Each class has one job
-- ✅ **Dependency Inversion**: High-level doesn't depend on low-level
-- ✅ **Open/Closed**: Open for extension, closed for modification
-- ✅ **Separation of Concerns**: Clear boundaries between layers
-- ✅ **DRY Principle**: No code repetition
+- **Single Responsibility**: Each class has one job
+- **Dependency Inversion**: High-level doesn't depend on low-level
+- **Open/Closed**: Open for extension, closed for modification
+- **Separation of Concerns**: Clear boundaries between layers
+- **DRY Principle**: No code repetition
 
 For detailed architecture documentation, see [js/README.md](js/README.md)
 
