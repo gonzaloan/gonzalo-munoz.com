@@ -13,10 +13,10 @@ class CVGame {
         this.boxes = [];
         this.clouds = [];
         this.information = [
-            { title: "About me", content: "Hi! My name is Gonzalo" },
-            { title: "Experience", content: "Senior Software Engineer - Certified AWS Solutions Architect" },
+            { title: "About me", content: "Hi! My name is Gonzalo Munoz" },
+            { title: "Experience", content: "11+ Years of Experience, Software Engineer / Cloud Engineer / AWS Expert" },
             { title: "Skills", content: "Java, Angular, Golang, AWS, Python" },
-            { title: "Certifications", content: "6x AWS Certified, GCP Cloud Engineer, OCA 8" },
+            { title: "Certifications", content: "10x AWS Certified, GCP Cloud Engineer, OCA 8" },
             { title: "Contact", content: "gonzaloan.munoz@gmail.com" }
         ];
 
