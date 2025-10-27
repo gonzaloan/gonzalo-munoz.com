@@ -88,10 +88,23 @@ class CVGame {
         this.coins += 1;
         this.coinCount.textContent = this.coins;
 
-        const infoContent = document.querySelectorAll('.info-content')[index];
+        // Cerrar todas las info-content activas antes de abrir la nueva
+        const allInfoContents = document.querySelectorAll('.info-content');
+        allInfoContents.forEach(content => {
+            content.classList.remove('active');
+        });
+
+        // Limpiar cualquier timeout anterior si existe
+        if (this.infoTimeout) {
+            clearTimeout(this.infoTimeout);
+        }
+
+        // Mostrar la nueva información
+        const infoContent = allInfoContents[index];
         infoContent.classList.add('active');
 
-        setTimeout(() => {
+        // Guardar el timeout para poder cancelarlo si es necesario
+        this.infoTimeout = setTimeout(() => {
             infoContent.classList.remove('active');
         }, 3000);
 
@@ -122,6 +135,7 @@ class CVGame {
 
     setupEventListeners() {
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
+        document.addEventListener('keyup', this.handleKeyUp.bind(this));
     }
 
     handleKeyDown(e) {
@@ -134,6 +148,12 @@ class CVGame {
         }
     }
 
+    handleKeyUp(e) {
+        if (e.code === 'ArrowRight' || e.code === 'KeyD' || e.code === 'ArrowLeft' || e.code === 'KeyA') {
+            this.stopWalking();
+        }
+    }
+
     moveLeft() {
         const containerRect = this.container.getBoundingClientRect();
         const marioRect = this.mario.getBoundingClientRect();
@@ -142,6 +162,7 @@ class CVGame {
         this.position = Math.max(minPosition, this.position - 20);
         this.mario.classList.remove('facing-right');
         this.mario.classList.add('facing-left');
+        this.mario.classList.add('walking');
         this.mario.style.left = `${this.position}px`;
         this.checkCollisions();
 
@@ -159,12 +180,17 @@ class CVGame {
         this.position = Math.min(maxPosition, this.position + 20);
         this.mario.classList.remove('facing-left');
         this.mario.classList.add('facing-right');
+        this.mario.classList.add('walking');
         this.mario.style.left = `${this.position}px`;
         this.checkCollisions();
         if (marioRect.right > containerRect.right) {
             this.position = maxPosition;
             this.mario.style.left = `${this.position}px`;
         }
+    }
+
+    stopWalking() {
+        this.mario.classList.remove('walking');
     }
 
     jump() {
@@ -204,6 +230,7 @@ class CVGame {
         });
         this.leftButton.addEventListener('touchend', () => {
             clearInterval(this.leftInterval);
+            this.stopWalking();
         });
 
         this.rightButton.addEventListener('touchstart', (e) => {
@@ -212,6 +239,7 @@ class CVGame {
         });
         this.rightButton.addEventListener('touchend', () => {
             clearInterval(this.rightInterval);
+            this.stopWalking();
         });
 
         this.leftButton.addEventListener('mousedown', () => {
@@ -219,18 +247,22 @@ class CVGame {
         });
         this.leftButton.addEventListener('mouseup', () => {
             clearInterval(this.leftInterval);
+            this.stopWalking();
         });
         this.leftButton.addEventListener('mouseleave', () => {
             clearInterval(this.leftInterval);
+            this.stopWalking();
         });
         this.rightButton.addEventListener('mousedown', () => {
             this.rightInterval = setInterval(() => this.moveRight(), 16);
         });
         this.rightButton.addEventListener('mouseup', () => {
             clearInterval(this.rightInterval);
+            this.stopWalking();
         });
         this.rightButton.addEventListener('mouseleave', () => {
             clearInterval(this.rightInterval);
+            this.stopWalking();
         });
     }
 

@@ -130,10 +130,27 @@ body {
     background-image: url('./img/mario.png');
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
 
 #mario.jumping {
     background-image: url('./img/mario-jumping.png');
+}
+
+#mario.walking {
+    animation: walk 0.3s ease-in-out infinite;
+}
+
+@keyframes walk {
+    0%, 100% {
+        transform: translateY(0px) scaleY(1);
+    }
+    50% {
+        transform: translateY(-3px) scaleY(0.95);
+    }
 }
 
 .facing-right {
@@ -142,6 +159,32 @@ body {
 
 .facing-left {
     transform: scaleX(-1);
+}
+
+#mario.walking.facing-right {
+    animation: walkRight 0.3s ease-in-out infinite;
+}
+
+#mario.walking.facing-left {
+    animation: walkLeft 0.3s ease-in-out infinite;
+}
+
+@keyframes walkRight {
+    0%, 100% {
+        transform: translateY(0px) scaleX(1) scaleY(1);
+    }
+    50% {
+        transform: translateY(-3px) scaleX(1) scaleY(0.95);
+    }
+}
+
+@keyframes walkLeft {
+    0%, 100% {
+        transform: translateY(0px) scaleX(-1) scaleY(1);
+    }
+    50% {
+        transform: translateY(-3px) scaleX(-1) scaleY(0.95);
+    }
 }
 
 .boxes-container {
