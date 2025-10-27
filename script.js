@@ -24,6 +24,11 @@ class CVGame {
         this.rightButton = document.getElementById('right-arrow');
         this.leftInterval = null;
         this.rightInterval = null;
+
+        // Audio elements
+        this.bgMusic = document.getElementById('bg-music');
+        this.victoryMusic = document.getElementById('victory-music');
+
         this.init();
     }
 
@@ -35,7 +40,32 @@ class CVGame {
         this.setupEventListeners();
         this.setupMobileControls();
         this.setupBoxInteraction();
+        this.setupAudio();
         this.gameLoop();
+    }
+
+    setupAudio() {
+        // Intentar reproducir la música de fondo al cargar
+        // Los navegadores modernos requieren interacción del usuario primero
+        this.bgMusic.volume = 0.3;
+        this.victoryMusic.volume = 0.5;
+
+        // Intentar reproducir automáticamente
+        const playPromise = this.bgMusic.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                // Si el navegador bloquea el autoplay, esperar a la primera interacción
+                const startMusic = () => {
+                    this.bgMusic.play();
+                    document.removeEventListener('click', startMusic);
+                    document.removeEventListener('keydown', startMusic);
+                    document.removeEventListener('touchstart', startMusic);
+                };
+                document.addEventListener('click', startMusic);
+                document.addEventListener('keydown', startMusic);
+                document.addEventListener('touchstart', startMusic);
+            });
+        }
     }
     createGameContent() {
         const gameContent = document.createElement('div');
@@ -117,6 +147,12 @@ class CVGame {
 
     showResetModal() {
         this.resetModal.style.display = 'flex';
+
+        // Detener la música de fondo y reproducir música de victoria
+        this.bgMusic.pause();
+        this.bgMusic.currentTime = 0;
+        this.victoryMusic.play();
+
         // Opcional: Detener el movimiento del personaje
         this.stopMoving();
     }
