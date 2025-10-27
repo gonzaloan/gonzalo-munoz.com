@@ -54,23 +54,82 @@ This project is a creative and engaging way to showcase professional credentials
 
 ## Technology Stack
 
-- Pure HTML5, CSS3, and JavaScript (ES6+)
+- Pure HTML5, CSS3, and JavaScript (ES6+ Modules)
 - No frameworks or dependencies
 - Responsive design with mobile-first approach
 - CSS animations and transitions
-- Object-oriented JavaScript architecture
+- **Clean Architecture** with SOLID principles
+- Professional-grade modular JavaScript
+
+## Code Architecture
+
+This project follows **Clean Architecture** and **SOLID principles** for maintainability and scalability:
+
+```
+┌─────────────────────────────────────────┐
+│        Presentation Layer               │
+│         (HTML, CSS, DOM)                │
+└─────────────────────────────────────────┘
+                    ↕
+┌─────────────────────────────────────────┐
+│      Application Layer (Game.js)        │
+│         Main Orchestrator               │
+└─────────────────────────────────────────┘
+                    ↕
+┌─────────────────────────────────────────┐
+│          Domain Layer                   │
+│  • Player Entity                        │
+│  • AudioManager                         │
+│  • UIManager                            │
+│  • InputManager                         │
+│  • CollisionDetector                    │
+└─────────────────────────────────────────┘
+                    ↕
+┌─────────────────────────────────────────┐
+│    Configuration (GameConfig)           │
+└─────────────────────────────────────────┘
+```
+
+### Key Architecture Features
+
+- ✅ **Single Responsibility**: Each class has one job
+- ✅ **Dependency Inversion**: High-level doesn't depend on low-level
+- ✅ **Open/Closed**: Open for extension, closed for modification
+- ✅ **Separation of Concerns**: Clear boundaries between layers
+- ✅ **DRY Principle**: No code repetition
+
+For detailed architecture documentation, see [js/README.md](js/README.md)
 
 ## Project Structure
 
 ```
 .
-├── index.html          # Main HTML structure
-├── script.js           # Game logic and interactions
-├── styles.css          # Visual styling and animations
-├── favicon.ico         # Site favicon
-└── img/               # Image assets
-    ├── logo.png
-    └── linkedin.png
+├── index.html                      # Main HTML structure
+├── styles.css                      # Visual styling and animations
+├── favicon.ico                     # Site favicon
+├── music/                          # Audio files
+│   ├── mario-ground-theme.mp3
+│   └── mario-castle-complete.mp3
+├── img/                            # Image assets
+│   ├── logo.png
+│   ├── linkedin.png
+│   ├── mario.png
+│   └── mario-jumping.png
+└── js/                             # Modular JavaScript (ES6+)
+    ├── main.js                     # Entry point
+    ├── Game.js                     # Main orchestrator
+    ├── README.md                   # Architecture docs
+    ├── config/
+    │   └── GameConfig.js           # Centralized configuration
+    ├── entities/
+    │   └── Player.js               # Player entity with physics
+    ├── managers/
+    │   ├── AudioManager.js         # Audio control
+    │   ├── UIManager.js            # UI management
+    │   └── InputManager.js         # Input handling
+    └── utils/
+        ├── CollisionDetector.js    # Collision algorithms
+        └── DOMBuilder.js           # DOM utilities
 ```
 
 ## Deployment
