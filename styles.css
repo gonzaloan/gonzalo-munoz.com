@@ -23,6 +23,243 @@ body {
     position: fixed;
 }
 
+/* Loading Screen Styles */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #5C94FC 0%, #5C94FC 70%, #00B800 70%, #00B800 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.5s ease-in;
+}
+
+#loading-screen.fade-out {
+    animation: fadeOut 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.loading-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.loading-logo {
+    margin-bottom: 30px;
+}
+
+.mario-jump {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+    border-radius: 50% 50% 0 0;
+    position: relative;
+    animation: marioJump 1s ease-in-out infinite;
+}
+
+.mario-jump::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 15%;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 30px 0 0 white;
+}
+
+.mario-jump::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 30px;
+    background: #0066FF;
+    border-radius: 0 0 20px 20px;
+}
+
+@keyframes marioJump {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+}
+
+.loading-title {
+    font-size: 24px;
+    color: white;
+    text-shadow: 4px 4px 0 #000;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+}
+
+.loading-bar-container {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.loading-bar-bg {
+    width: 400px;
+    height: 30px;
+    background: #000;
+    border: 4px solid white;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 0 auto 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.loading-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+    transition: width 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-bar-fill::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+.loading-blocks {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.block {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #FED049 0%, #FDB833 100%);
+    border: 3px solid #B67B11;
+    position: relative;
+    animation: blockBounce 0.6s ease-in-out infinite;
+}
+
+.block::before {
+    content: '?';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 20px;
+    text-shadow: 2px 2px 0 #B67B11;
+}
+
+.block:nth-child(1) { animation-delay: 0s; }
+.block:nth-child(2) { animation-delay: 0.1s; }
+.block:nth-child(3) { animation-delay: 0.2s; }
+.block:nth-child(4) { animation-delay: 0.3s; }
+.block:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes blockBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.loading-text {
+    font-size: 16px;
+    color: white;
+    text-shadow: 2px 2px 0 #000;
+    margin-bottom: 20px;
+}
+
+.loading-coins {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.coin-bounce {
+    font-size: 30px;
+    display: inline-block;
+    animation: coinBounce 1s ease-in-out infinite;
+}
+
+.coin-bounce:nth-child(1) { animation-delay: 0s; }
+.coin-bounce:nth-child(2) { animation-delay: 0.2s; }
+.coin-bounce:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes coinBounce {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(180deg); }
+}
+
+/* Responsive loading screen */
+@media (max-width: 768px) {
+    .loading-title {
+        font-size: 18px;
+    }
+
+    .loading-bar-bg {
+        width: 300px;
+        height: 25px;
+    }
+
+    .block {
+        width: 30px;
+        height: 30px;
+    }
+
+    .block::before {
+        font-size: 16px;
+    }
+
+    .loading-text {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .loading-title {
+        font-size: 14px;
+    }
+
+    .loading-bar-bg {
+        width: 250px;
+        height: 20px;
+    }
+
+    .block {
+        width: 25px;
+        height: 25px;
+    }
+
+    .mario-jump {
+        width: 48px;
+        height: 48px;
+    }
+}
+
 #game-container {
     position: relative;
     width: 100%;
@@ -121,36 +358,43 @@ body {
 
 #mario {
     position: absolute;
-    width: 50px;
-    height: 80px;
+    width: 70px;
+    height: 98px;
     bottom: 20%;
     left: 100px;
-    z-index: 100;
-    transition: transform 0.1s;
     background-image: url('./img/mario.png');
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center;
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
+    background-position: center bottom;
+    z-index: 100;
+    transition: transform 0.1s ease;
 }
 
 #mario.jumping {
     background-image: url('./img/mario-jumping.png');
 }
 
-#mario.walking {
-    animation: walk 0.3s ease-in-out infinite;
+#mario.won {
+    background-image: url('./img/mario-won.png');
+    animation: none !important;
 }
 
-@keyframes walk {
-    0%, 100% {
-        transform: translateY(0px) scaleY(1);
-    }
-    50% {
-        transform: translateY(-3px) scaleY(0.95);
-    }
+#mario.walking {
+    animation: walkBounce 0.3s ease-in-out infinite;
+}
+
+@keyframes walkBounce {
+    0%, 100% { transform: translateY(0) scaleX(1); }
+    50% { transform: translateY(-3px) scaleX(1); }
+}
+
+#mario.walking.facing-left {
+    animation: walkBounceLeft 0.3s ease-in-out infinite;
+}
+
+@keyframes walkBounceLeft {
+    0%, 100% { transform: translateY(0) scaleX(-1); }
+    50% { transform: translateY(-3px) scaleX(-1); }
 }
 
 .facing-right {
@@ -159,32 +403,6 @@ body {
 
 .facing-left {
     transform: scaleX(-1);
-}
-
-#mario.walking.facing-right {
-    animation: walkRight 0.3s ease-in-out infinite;
-}
-
-#mario.walking.facing-left {
-    animation: walkLeft 0.3s ease-in-out infinite;
-}
-
-@keyframes walkRight {
-    0%, 100% {
-        transform: translateY(0px) scaleX(1) scaleY(1);
-    }
-    50% {
-        transform: translateY(-3px) scaleX(1) scaleY(0.95);
-    }
-}
-
-@keyframes walkLeft {
-    0%, 100% {
-        transform: translateY(0px) scaleX(-1) scaleY(1);
-    }
-    50% {
-        transform: translateY(-3px) scaleX(-1) scaleY(0.95);
-    }
 }
 
 .boxes-container {

@@ -33,6 +33,7 @@ export class Game {
         this.boxesContainer = null;
         this.resetModal = null;
         this.isGameOver = false;
+        this.victoryTriggered = false;
     }
 
     /**
@@ -121,6 +122,7 @@ export class Game {
      */
     updatePhysics() {
         this.player.updateJump();
+        this.player.updateSprites();
     }
 
     /**
@@ -148,7 +150,7 @@ export class Game {
         this.uiManager.showInfo(index);
         this.incrementCoins();
 
-        if (this.isVictoryConditionMet()) {
+        if (this.isVictoryConditionMet() && !this.victoryTriggered) {
             this.triggerVictory();
         }
     }
@@ -179,19 +181,94 @@ export class Game {
      * Trigger victory sequence
      */
     triggerVictory() {
-        setTimeout(() => {
-            this.showVictoryModal();
-        }, this.config.GAME.VICTORY_DELAY);
+        // Mark that victory is triggered but continue game loop
+        this.victoryTriggered = true;
+
+        // Wait for Mario to land
+        this.waitForLanding();
+    }
+
+    /**
+     * Wait for Mario to land before starting victory sequence
+     */
+    waitForLanding() {
+        const checkLanding = () => {
+            if (!this.player.getIsJumping()) {
+                // Mario has landed, start victory sequence
+                this.startVictorySequence();
+            } else {
+                // Check again in next frame
+                requestAnimationFrame(checkLanding);
+            }
+        };
+
+        checkLanding();
+    }
+
+    /**
+     * Start the victory animation sequence
+     */
+    startVictorySequence() {
+        // Stop player input but continue physics
+        this.inputManager.cleanup();
+
+        // Calculate center position (below 3rd box)
+        const containerWidth = this.container.getBoundingClientRect().width;
+        const marioWidth = this.marioElement.getBoundingClientRect().width;
+        const centerPosition = (containerWidth - marioWidth) / 2;
+
+        // Add walking animation
+        this.marioElement.classList.add('walking');
+
+        // Determine direction
+        const currentPosition = this.player.getPosition();
+        const goingRight = centerPosition > currentPosition;
+        this.player.updateDirection(goingRight ? 'right' : 'left');
+
+        // Walk to center
+        const walkToCenter = () => {
+            const currentPos = this.player.getPosition();
+            const distance = Math.abs(centerPosition - currentPos);
+
+            if (distance > 5) {
+                // Still need to walk
+                if (goingRight) {
+                    this.player.position = Math.min(centerPosition, currentPos + this.config.PLAYER.MOVE_SPEED);
+                } else {
+                    this.player.position = Math.max(centerPosition, currentPos - this.config.PLAYER.MOVE_SPEED);
+                }
+                this.player.updatePosition();
+                requestAnimationFrame(walkToCenter);
+            } else {
+                // Reached center
+                this.player.position = centerPosition;
+                this.player.updatePosition();
+                this.marioElement.classList.remove('walking');
+
+                // Stop game
+                this.isGameOver = true;
+
+                // Change to won pose
+                setTimeout(() => {
+                    this.marioElement.classList.add('won');
+
+                    // Show victory modal after won pose
+                    setTimeout(() => {
+                        this.showVictoryModal();
+                    }, 2000);
+                }, 500);
+            }
+        };
+
+        walkToCenter();
     }
 
     /**
      * Show victory modal and play victory music
      */
     showVictoryModal() {
-        this.isGameOver = true;
         this.resetModal.style.display = 'flex';
         this.audioManager.playVictoryMusic();
-        this.inputManager.cleanup();
     }
 
     /**

@@ -73,11 +73,7 @@ export class Player {
         if (!this.isJumping) {
             this.isJumping = true;
             this.velocityY = this.config.PHYSICS.JUMP_FORCE;
-
             this.element.classList.add('jumping');
-            setTimeout(() => {
-                this.element.classList.remove('jumping');
-            }, this.config.ANIMATION.JUMP_DURATION);
         }
     }
 
@@ -94,6 +90,7 @@ export class Player {
                 currentBottom = this.config.PHYSICS.GROUND_LEVEL;
                 this.isJumping = false;
                 this.velocityY = 0;
+                this.element.classList.remove('jumping');
             }
 
             this.element.style.bottom = `${currentBottom}%`;
@@ -117,6 +114,13 @@ export class Player {
         } else {
             this.element.classList.remove('walking');
         }
+    }
+
+    /**
+     * Update sprite animations (call in game loop)
+     */
+    updateSprites() {
+        // No sprites to update in simple version
     }
 
     /**

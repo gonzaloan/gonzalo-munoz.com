@@ -10,16 +10,15 @@ export const GameConfig = {
     },
 
     PLAYER: {
-        WIDTH: 50,
-        HEIGHT: 80,
+        WIDTH: 70,
+        HEIGHT: 98,
         INITIAL_POSITION: 100,
         MOVE_SPEED: 20
     },
 
     GAME: {
         TOTAL_BOXES: 5,
-        INFO_DISPLAY_DURATION: 3000,
-        VICTORY_DELAY: 6000
+        INFO_DISPLAY_DURATION: 3000
     },
 
     AUDIO: {
@@ -28,9 +27,6 @@ export const GameConfig = {
     },
 
     ANIMATION: {
-        WALK_DURATION: 0.3,
-        WALK_BOUNCE_HEIGHT: 3,
-        JUMP_DURATION: 500,
         MOBILE_CONTROL_INTERVAL: 16
     },
 
