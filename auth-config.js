@@ -12,7 +12,7 @@ function getCognitoLoginUrl() {
     const params = new URLSearchParams({
         client_id: COGNITO_CONFIG.clientId,
         response_type: 'code',
-        scope: 'openid email profile',
+        scope: 'email openid ',
         redirect_uri: COGNITO_CONFIG.redirectUri
     });
 
