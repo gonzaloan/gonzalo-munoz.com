@@ -1,9 +1,8 @@
 // Cognito Configuration
 const COGNITO_CONFIG = {
-    userPoolId: 'us-east-1_AkoIzDkI4',
-    clientId: '2petoedlpeko4hae2r14mb9qjm',
-    domain: 'https://us-east-1akoizdki4.auth.us-east-1.amazoncognito.com',
-    redirectUri: 'https://gonzalo-munoz.com/logged.html',
+    userPoolId: 'us-east-1_XG4v2RPEk',
+    clientId: '6pu52ka70282s0sduko24ufd3',
+    domain: 'https://us-east-1xg4v2rpek.auth.us-east-1.amazoncognito.com',
     region: 'us-east-1'
 };
 

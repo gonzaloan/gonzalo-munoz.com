@@ -99,7 +99,7 @@
                 grant_type: 'authorization_code',
                 client_id: COGNITO_CONFIG.clientId,
                 code: code,
-                redirect_uri: COGNITO_CONFIG.redirectUri
+                redirect_uri: getRedirectUri()
             });
 
             const response = await fetch(tokenEndpoint, {
