@@ -43,6 +43,7 @@
         </div>
         <div class="header-right">
             <a href="https://guide.gonzalo-munoz.com" class="snes-button" target="_blank">My Notes!</a>
+            <button id="login-button" class="snes-button" style="margin-left: 10px;">Login</button>
         </div>
     </div>
 </header>
@@ -66,6 +67,16 @@
     <source src="./music/mario-castle-complete.mp3" type="audio/mpeg">
 </audio>
 
+<script src="auth-config.js"></script>
+<script>
+    // Setup login button
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginButton = document.getElementById('login-button');
+        if (loginButton) {
+            loginButton.addEventListener('click', loginWithCognito);
+        }
+    });
+</script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

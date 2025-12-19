@@ -1,0 +1,110 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: API Gateway with Cognito Authorizer for gonzalo-munoz.com
+
+Parameters:
+  CognitoUserPoolId:
+    Type: String
+    Default: us-east-1_Sg7cWSjgE
+    Description: Cognito User Pool ID
+
+  CognitoUserPoolArn:
+    Type: String
+    Default: arn:aws:cognito-idp:us-east-1:ACCOUNT_ID:userpool/us-east-1_Sg7cWSjgE
+    Description: Cognito User Pool ARN (replace ACCOUNT_ID with your AWS account ID)
+
+Globals:
+  Function:
+    Timeout: 10
+    Runtime: python3.11
+    Environment:
+      Variables:
+        COGNITO_USER_POOL_ID: !Ref CognitoUserPoolId
+
+Resources:
+  # API Gateway
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: gonzalo-munoz-api
+      StageName: prod
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'https://gonzalo-munoz.com'"
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !Ref CognitoUserPoolArn
+            AuthorizationScopes:
+              - openid
+              - email
+              - profile
+
+  # Example Lambda Function - Hello World (Protected)
+  HelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: gonzalo-munoz-hello
+      CodeUri: src/hello/
+      Handler: app.lambda_handler
+      Description: Protected endpoint that returns hello message
+      Events:
+        HelloApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /hello
+            Method: GET
+
+  # Example Lambda Function - Get User Info (Protected)
+  UserInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: gonzalo-munoz-user-info
+      CodeUri: src/user-info/
+      Handler: app.lambda_handler
+      Description: Returns authenticated user information
+      Events:
+        UserInfoApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /user-info
+            Method: GET
+
+  # Public endpoint (No auth required) - Health Check
+  HealthCheckFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: gonzalo-munoz-health
+      CodeUri: src/health/
+      Handler: app.lambda_handler
+      Description: Public health check endpoint
+      Events:
+        HealthApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /health
+            Method: GET
+            Auth:
+              Authorizer: NONE
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint URL
+    Value: !Sub 'https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/prod/'
+
+  HelloEndpoint:
+    Description: Protected Hello endpoint
+    Value: !Sub 'https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/prod/hello'
+
+  UserInfoEndpoint:
+    Description: Protected User Info endpoint
+    Value: !Sub 'https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/prod/user-info'
+
+  HealthEndpoint:
+    Description: Public Health Check endpoint
+    Value: !Sub 'https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/prod/health'

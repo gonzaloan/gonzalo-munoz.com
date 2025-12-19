@@ -3,14 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to my website</title>
+    <title>Welcome - Authenticated</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="logged.js"></script>
 </head>
 <body>
-    <div id="game-container">
-        <div id="mario"></div>
-        You've been logged. Welcome!
+    <div id="loading-container" style="display: none; text-align: center; padding: 50px;">
+        <h2>Authenticating...</h2>
+        <p>Please wait while we verify your credentials.</p>
     </div>
+
+    <div id="game-container" style="display: none;">
+        <div id="mario"></div>
+        <h1>Welcome, <span id="user-email">User</span>!</h1>
+        <p>You've been successfully authenticated.</p>
+        <button id="logout-button" class="snes-button" style="margin-top: 20px;">Logout</button>
+
+        <div style="margin-top: 30px;">
+            <h3>API User Information:</h3>
+            <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; text-align: left; max-width: 600px; margin: 0 auto;">
+                <p id="api-user-info" style="color: #666;">Loading user info from API...</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <h3>Your Tokens (for API calls):</h3>
+            <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; text-align: left; max-width: 600px; margin: 0 auto;">
+                <p><strong>ID Token:</strong></p>
+                <textarea id="id-token-display" readonly style="width: 100%; height: 60px; font-size: 10px;"></textarea>
+                <p style="margin-top: 10px;"><strong>Access Token:</strong></p>
+                <textarea id="access-token-display" readonly style="width: 100%; height: 60px; font-size: 10px;"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div id="error-container" style="display: none; text-align: center; padding: 50px;">
+        <h2>Authentication Error</h2>
+        <p id="error-message">Something went wrong. Please try again.</p>
+        <button onclick="window.location.href='index.html'" class="snes-button">Back to Home</button>
+    </div>
+
+    <script src="auth-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="logged.js"></script>
+    <script>
+        // Handle Cognito callback and exchange code for tokens
+        async function handleCallback() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const error = urlParams.get('error');
+
+            if (error) {
+                showError(`Authentication error: ${error}`);
+                return;
+            }
+
+            if (!code) {
+                // Check if already logged in
+                const idToken = sessionStorage.getItem('idToken');
+                if (idToken && isTokenValid(idToken)) {
+                    displayUserInfo();
+                    return;
+                }
+                showError('No authentication code found. Please login again.');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading-container').style.display = 'block';
+
+            try {
+                // Exchange code for tokens
+                const tokens = await exchangeCodeForTokens(code);
+
+                // Store tokens in sessionStorage
+                sessionStorage.setItem('idToken', tokens.id_token);
+                sessionStorage.setItem('accessToken', tokens.access_token);
+                sessionStorage.setItem('refreshToken', tokens.refresh_token);
+
+                // Clean URL (remove code parameter)
+                window.history.replaceState({}, document.title, window.location.pathname);
+
+                // Display user info
+                displayUserInfo();
+            } catch (err) {
+                console.error('Token exchange failed:', err);
+                showError('Failed to authenticate. Please try again.');
+            }
+        }
+
+        // Exchange authorization code for tokens
+        async function exchangeCodeForTokens(code) {
+            const tokenEndpoint = `${COGNITO_CONFIG.domain}/oauth2/token`;
+
+            const params = new URLSearchParams({
+                grant_type: 'authorization_code',
+                client_id: COGNITO_CONFIG.clientId,
+                code: code,
+                redirect_uri: COGNITO_CONFIG.redirectUri
+            });
+
+            const response = await fetch(tokenEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params.toString()
+            });
+
+            if (!response.ok) {
+                throw new Error('Token exchange failed');
+            }
+
+            return await response.json();
+        }
+
+        // Check if token is valid (not expired)
+        function isTokenValid(token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const exp = payload.exp * 1000; // Convert to milliseconds
+                return Date.now() < exp;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Decode JWT and get user info
+        function getUserInfo(idToken) {
+            try {
+                const payload = JSON.parse(atob(idToken.split('.')[1]));
+                return {
+                    email: payload.email || payload['cognito:username'] || 'User',
+                    username: payload['cognito:username'] || payload.email || 'User',
+                    sub: payload.sub
+                };
+            } catch (e) {
+                return { email: 'User', username: 'User' };
+            }
+        }
+
+        // Load user info from API
+        async function loadApiUserInfo() {
+            try {
+                const apiUserInfo = await getUserInfo();
+                const userInfoDiv = document.getElementById('api-user-info');
+
+                if (apiUserInfo && apiUserInfo.user) {
+                    const user = apiUserInfo.user;
+                    userInfoDiv.innerHTML = `
+                        <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+                        <p><strong>Username:</strong> ${user.username || 'N/A'}</p>
+                        <p><strong>Email Verified:</strong> ${user.email_verified || 'N/A'}</p>
+                        <p><strong>User ID:</strong> ${user.sub || 'N/A'}</p>
+                        <p style="margin-top: 10px; color: #4caf50;"><strong>Status:</strong> API Connected!</p>
+                    `;
+                } else {
+                    userInfoDiv.innerHTML = '<p style="color: #ff9800;">API response received but no user data found.</p>';
+                }
+            } catch (error) {
+                console.error('Failed to load API user info:', error);
+                document.getElementById('api-user-info').innerHTML =
+                    '<p style="color: #f44336;">Failed to connect to API. Check console for details.</p>';
+            }
+        }
+
+        // Display user info
+        function displayUserInfo() {
+            const idToken = sessionStorage.getItem('idToken');
+            const accessToken = sessionStorage.getItem('accessToken');
+
+            if (!idToken) {
+                showError('No valid session found. Please login again.');
+                return;
+            }
+
+            const userInfo = getUserInfo(idToken);
+
+            document.getElementById('loading-container').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            document.getElementById('user-email').textContent = userInfo.email;
+            document.getElementById('id-token-display').value = idToken;
+            document.getElementById('access-token-display').value = accessToken;
+
+            // Setup logout button
+            document.getElementById('logout-button').addEventListener('click', logout);
+
+            // Load user info from API
+            loadApiUserInfo();
+
+            // Initialize the Logged class for animations
+            new Logged();
+        }
+
+        // Show error
+        function showError(message) {
+            document.getElementById('loading-container').style.display = 'none';
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById('error-container').style.display = 'block';
+            document.getElementById('error-message').textContent = message;
+        }
+
+        // Run on page load
+        window.addEventListener('load', handleCallback);
+    </script>
 </body>
 </html>
