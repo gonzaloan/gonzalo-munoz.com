@@ -3,7 +3,8 @@ const COGNITO_CONFIG = {
     userPoolId: 'us-east-1_XG4v2RPEk',
     clientId: '6pu52ka70282s0sduko24ufd3',
     domain: 'https://us-east-1xg4v2rpek.auth.us-east-1.amazoncognito.com',
-    region: 'us-east-1'
+    region: 'us-east-1',
+    redirectUri: 'https://gonzalo-munoz.com/logged.html'
 };
 
 // Build Cognito Hosted UI login URL
