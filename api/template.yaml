@@ -5,13 +5,13 @@ Description: API Gateway with Cognito Authorizer for gonzalo-munoz.com
 Parameters:
   CognitoUserPoolId:
     Type: String
-    Default: us-east-1_Sg7cWSjgE
+    Default: us-east-1_AkoIzDkI4
     Description: Cognito User Pool ID
 
   CognitoUserPoolArn:
     Type: String
-    Default: arn:aws:cognito-idp:us-east-1:ACCOUNT_ID:userpool/us-east-1_Sg7cWSjgE
-    Description: Cognito User Pool ARN (replace ACCOUNT_ID with your AWS account ID)
+    Default: arn:aws:cognito-idp:us-east-1:201735383261:userpool/us-east-1_AkoIzDkI4
+    Description: Cognito User Pool ARN
 
 Globals:
   Function:

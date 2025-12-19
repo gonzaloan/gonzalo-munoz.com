@@ -3,7 +3,6 @@
  * Update API_BASE_URL after deploying the SAM template
  */
 
-// TODO: Update this with your API Gateway URL after deployment
 const API_BASE_URL = 'https://api.gonzalo-munoz.com';
 
 /**
