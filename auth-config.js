@@ -3,17 +3,32 @@ const COGNITO_CONFIG = {
     userPoolId: 'us-east-1_XG4v2RPEk',
     clientId: '6pu52ka70282s0sduko24ufd3',
     domain: 'https://us-east-1xg4v2rpek.auth.us-east-1.amazoncognito.com',
-    region: 'us-east-1',
-    redirectUri: 'https://gonzalo-munoz.com/logged.html'
+    region: 'us-east-1'
 };
+
+// Get redirect URI based on current location
+function getRedirectUri() {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return `http://${window.location.host}/logged.html`;
+    }
+    return 'https://gonzalo-munoz.com/logged.html';
+}
+
+// Get logout URI based on current location
+function getLogoutUri() {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return `http://${window.location.host}/index.html`;
+    }
+    return 'https://gonzalo-munoz.com/index.html';
+}
 
 // Build Cognito Hosted UI login URL
 function getCognitoLoginUrl() {
     const params = new URLSearchParams({
         client_id: COGNITO_CONFIG.clientId,
         response_type: 'code',
-        scope: 'email openid ',
-        redirect_uri: COGNITO_CONFIG.redirectUri
+        scope: 'email openid',
+        redirect_uri: getRedirectUri()
     });
 
     return `${COGNITO_CONFIG.domain}/login?${params.toString()}`;
@@ -23,7 +38,7 @@ function getCognitoLoginUrl() {
 function getCognitoLogoutUrl() {
     const params = new URLSearchParams({
         client_id: COGNITO_CONFIG.clientId,
-        logout_uri: 'https://gonzalo-munoz.com/index.html'
+        logout_uri: getLogoutUri()
     });
 
     return `${COGNITO_CONFIG.domain}/logout?${params.toString()}`;
