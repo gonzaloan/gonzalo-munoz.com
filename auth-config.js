@@ -3,7 +3,8 @@ const COGNITO_CONFIG = {
     userPoolId: 'us-east-1_XG4v2RPEk',
     clientId: '7a9riqnf3fj8a3s4kc6juk7f6c',
     domain: 'https://gonzalo-auth-2025.auth.us-east-1.amazoncognito.com',
-    region: 'us-east-1'
+    region: 'us-east-1',
+    isCustomDomain: false
 };
 
 // Get redirect URI based on current location
@@ -31,8 +32,11 @@ function getCognitoLoginUrl() {
         redirect_uri: getRedirectUri()
     });
 
-    return `${COGNITO_CONFIG.domain}/login?${params.toString()}`;
+    // Custom domains require OAuth2 endpoints
+    const endpoint = COGNITO_CONFIG.isCustomDomain ? '/oauth2/authorize' : '/login';
+    return `${COGNITO_CONFIG.domain}${endpoint}?${params.toString()}`;
 }
+
 // Build Cognito logout URL
 function getCognitoLogoutUrl() {
     const params = new URLSearchParams({
@@ -40,7 +44,9 @@ function getCognitoLogoutUrl() {
         logout_uri: getLogoutUri()
     });
 
-    return `${COGNITO_CONFIG.domain}/logout?${params.toString()}`;
+    // Custom domains require OAuth2 endpoints
+    const endpoint = COGNITO_CONFIG.isCustomDomain ? '/oauth2/logout' : '/logout';
+    return `${COGNITO_CONFIG.domain}${endpoint}?${params.toString()}`;
 }
 
 // Redirect to Cognito login
