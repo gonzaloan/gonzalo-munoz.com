@@ -1,8 +1,8 @@
 // Cognito Configuration
 const COGNITO_CONFIG = {
     userPoolId: 'us-east-1_XG4v2RPEk',
-    clientId: '6pu52ka70282s0sduko24ufd3',
-    domain: 'https://us-east-1xg4v2rpek.auth.us-east-1.amazoncognito.com',
+    clientId: '7a9riqnf3fj8a3s4kc6juk7f6c',
+    domain: 'https://gonzalo-auth-2025.auth.us-east-1.amazoncognito.com',
     region: 'us-east-1'
 };
 
@@ -33,7 +33,6 @@ function getCognitoLoginUrl() {
 
     return `${COGNITO_CONFIG.domain}/login?${params.toString()}`;
 }
-
 // Build Cognito logout URL
 function getCognitoLogoutUrl() {
     const params = new URLSearchParams({
