@@ -55,6 +55,14 @@ Resources:
             RestApiId: !Ref MyApi
             Path: /hello
             Method: GET
+        HelloOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /hello
+            Method: OPTIONS
+            Auth:
+              Authorizer: NONE
     Metadata:
       BuildMethod: makefile
 
@@ -73,6 +81,14 @@ Resources:
             RestApiId: !Ref MyApi
             Path: /user-info
             Method: GET
+        UserInfoOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /user-info
+            Method: OPTIONS
+            Auth:
+              Authorizer: NONE
     Metadata:
       BuildMethod: makefile
 
