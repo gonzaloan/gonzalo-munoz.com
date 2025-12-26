@@ -21,6 +21,19 @@ type Response struct {
 }
 
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	// Handle OPTIONS request for CORS preflight
+	if request.HTTPMethod == "OPTIONS" {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 200,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":  "https://gonzalo-munoz.com",
+				"Access-Control-Allow-Methods": "GET,OPTIONS",
+				"Access-Control-Allow-Headers": "Content-Type,Authorization",
+			},
+			Body: "",
+		}, nil
+	}
+
 	// Get user info from Cognito authorizer claims
 	claims := request.RequestContext.Authorizer["claims"].(map[string]interface{})
 
