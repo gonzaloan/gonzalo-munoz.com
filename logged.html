@@ -334,22 +334,28 @@
 
     // Load user info from API
     async function loadApiUserInfo() {
+        const statusDiv = document.getElementById('api-status');
+
         try {
             const apiUserInfo = await getUserInfo();
-            const statusDiv = document.getElementById('api-status');
 
             if (apiUserInfo && apiUserInfo.user) {
                 statusDiv.className = 'api-status connected';
-                statusDiv.innerHTML = '<span>✅ API Connected!</span>';
+                statusDiv.innerHTML = '<span>API Connected!</span>';
             } else {
                 statusDiv.className = 'api-status error';
-                statusDiv.innerHTML = '<span>⚠️ API responded but no data</span>';
+                statusDiv.innerHTML = '<span>API responded but no data</span>';
             }
         } catch (error) {
             console.error('Failed to load API user info:', error);
-            const statusDiv = document.getElementById('api-status');
             statusDiv.className = 'api-status error';
-            statusDiv.innerHTML = '<span>❌ API Connection Failed</span>';
+
+            // Show CORS error hint for localhost
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                statusDiv.innerHTML = '<span>CORS: Use production URL</span>';
+            } else {
+                statusDiv.innerHTML = '<span>API Connection Failed</span>';
+            }
         }
     }
 

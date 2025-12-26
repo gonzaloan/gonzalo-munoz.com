@@ -16,7 +16,9 @@ Parameters:
 Globals:
   Function:
     Timeout: 10
-    Runtime: python3.11
+    Runtime: provided.al2023
+    Architectures:
+      - x86_64
     Environment:
       Variables:
         COGNITO_USER_POOL_ID: !Ref CognitoUserPoolId
@@ -37,10 +39,6 @@ Resources:
         Authorizers:
           CognitoAuthorizer:
             UserPoolArn: !Ref CognitoUserPoolArn
-            AuthorizationScopes:
-              - openid
-              - email
-              - profile
 
   # Example Lambda Function - Hello World (Protected)
   HelloFunction:
@@ -48,7 +46,7 @@ Resources:
     Properties:
       FunctionName: gonzalo-munoz-hello
       CodeUri: src/hello/
-      Handler: app.lambda_handler
+      Handler: bootstrap
       Description: Protected endpoint that returns hello message
       Events:
         HelloApi:
@@ -57,6 +55,8 @@ Resources:
             RestApiId: !Ref MyApi
             Path: /hello
             Method: GET
+    Metadata:
+      BuildMethod: makefile
 
   # Example Lambda Function - Get User Info (Protected)
   UserInfoFunction:
@@ -64,7 +64,7 @@ Resources:
     Properties:
       FunctionName: gonzalo-munoz-user-info
       CodeUri: src/user-info/
-      Handler: app.lambda_handler
+      Handler: bootstrap
       Description: Returns authenticated user information
       Events:
         UserInfoApi:
@@ -73,6 +73,8 @@ Resources:
             RestApiId: !Ref MyApi
             Path: /user-info
             Method: GET
+    Metadata:
+      BuildMethod: makefile
 
   # Public endpoint (No auth required) - Health Check
   HealthCheckFunction:
@@ -80,7 +82,7 @@ Resources:
     Properties:
       FunctionName: gonzalo-munoz-health
       CodeUri: src/health/
-      Handler: app.lambda_handler
+      Handler: bootstrap
       Description: Public health check endpoint
       Events:
         HealthApi:
@@ -91,6 +93,8 @@ Resources:
             Method: GET
             Auth:
               Authorizer: NONE
+    Metadata:
+      BuildMethod: makefile
 
 Outputs:
   ApiUrl:
