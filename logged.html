@@ -148,6 +148,396 @@
             font-size: 24px;
             margin-bottom: 20px;
         }
+
+        /* Header user info */
+        .header-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-info-text {
+            color: white;
+            font-size: 14px;
+            font-family: 'Press Start 2P', cursive;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .user-info-text strong {
+            color: #FFD700;
+        }
+
+        #logout-button-header {
+            margin-left: 10px;
+        }
+
+        /* Interactive Boxes */
+        .interactive-boxes {
+            position: absolute;
+            top: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+            z-index: 10;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 20px;
+            color: #FFD700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            z-index: 10;
+            animation: bounce 2s infinite;
+            text-align: center;
+        }
+
+        .welcome-message .verified-badge {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        .info-box {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            border: 4px solid #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 -4px 0 rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .info-box.active:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5), inset 0 -4px 0 rgba(0,0,0,0.3);
+            background: linear-gradient(145deg, #FFE55C, #FFB84D);
+        }
+
+        .info-box.active:active {
+            transform: translateY(-5px) scale(0.95);
+        }
+
+        .info-box.disabled {
+            background: linear-gradient(145deg, #888, #666);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .info-box.disabled:hover {
+            transform: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 -4px 0 rgba(0,0,0,0.2);
+        }
+
+        .box-icon {
+            font-size: 64px;
+            font-family: 'Press Start 2P', cursive;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .box-label {
+            font-size: 10px;
+            font-family: 'Press Start 2P', cursive;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            text-align: center;
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        /* Mario-style Pop-up */
+        .info-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .popup-content {
+            background: linear-gradient(135deg, #1E88E5 0%, #1565C0 100%);
+            border: 6px solid #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            max-width: 500px;
+            width: 90%;
+            padding: 0;
+            overflow: hidden;
+            animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .popup-header {
+            background: #FFD700;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #FFA500;
+        }
+
+        .popup-header h3 {
+            margin: 0;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            color: #333;
+            text-shadow: 2px 2px 0 rgba(255,255,255,0.5);
+        }
+
+        .popup-close {
+            background: #f44336;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .popup-close:hover {
+            background: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .popup-body {
+            padding: 30px;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            line-height: 1.8;
+            min-height: 100px;
+        }
+
+        .popup-footer {
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .popup-footer .snes-button {
+            flex: 1;
+            max-width: 150px;
+        }
+
+        @media (max-width: 1024px) {
+            .welcome-message {
+                font-size: 16px;
+                top: 110px;
+            }
+
+            .interactive-boxes {
+                gap: 20px;
+                top: 180px;
+            }
+
+            .info-box {
+                width: 100px;
+                height: 100px;
+            }
+
+            .box-icon {
+                font-size: 54px;
+            }
+
+            .box-label {
+                font-size: 9px;
+                bottom: -20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .welcome-message {
+                font-size: 14px;
+                top: 100px;
+                max-width: 90%;
+            }
+
+            .interactive-boxes {
+                flex-wrap: wrap;
+                gap: 15px;
+                top: 150px;
+                max-width: 95%;
+                justify-content: center;
+            }
+
+            .info-box {
+                width: 90px;
+                height: 90px;
+            }
+
+            .box-icon {
+                font-size: 48px;
+            }
+
+            .box-label {
+                font-size: 8px;
+                bottom: -20px;
+            }
+
+            .user-info-text {
+                font-size: 10px;
+            }
+
+            .header-center {
+                display: none !important;
+            }
+
+            .popup-content {
+                width: 95%;
+                margin: 10px;
+            }
+
+            .popup-header h3 {
+                font-size: 14px;
+            }
+
+            .popup-body {
+                font-size: 12px;
+                padding: 20px;
+            }
+
+            .popup-footer .snes-button {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-message {
+                font-size: 10px;
+                top: 90px;
+                padding: 0 10px;
+            }
+
+            .welcome-message .verified-badge {
+                font-size: 12px;
+            }
+
+            .interactive-boxes {
+                top: 130px;
+                gap: 10px;
+            }
+
+            .info-box {
+                width: 70px;
+                height: 70px;
+            }
+
+            .box-icon {
+                font-size: 38px;
+                margin-bottom: 4px;
+            }
+
+            .box-label {
+                font-size: 7px;
+                bottom: -18px;
+            }
+
+            .user-info-text {
+                font-size: 8px;
+            }
+
+            .popup-header h3 {
+                font-size: 12px;
+            }
+
+            .popup-body {
+                font-size: 10px;
+                padding: 15px;
+                line-height: 1.6;
+            }
+
+            .popup-footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .popup-footer .snes-button {
+                max-width: 100%;
+                font-size: 11px;
+            }
+
+            .popup-close {
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+            }
+
+            .header-left img {
+                max-width: 80px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .welcome-message {
+                font-size: 9px;
+                top: 85px;
+            }
+
+            .interactive-boxes {
+                top: 120px;
+                gap: 8px;
+            }
+
+            .info-box {
+                width: 60px;
+                height: 60px;
+            }
+
+            .box-icon {
+                font-size: 32px;
+            }
+
+            .box-label {
+                font-size: 6px;
+                bottom: -15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -177,8 +567,16 @@
         <div class="header-left">
             <img src="./img/logo.png" alt="Logo" class="header-logo">
         </div>
+        <div class="header-center" id="user-info-header" style="display: none;">
+            <span class="user-info-text">
+                <strong>Welcome Back!</strong>
+                <span id="header-email">Loading...</span> |
+                <span id="header-username">Loading...</span>
+            </span>
+        </div>
         <div class="header-right">
             <a href="https://guide.gonzalo-munoz.com" class="snes-button" target="_blank">My Notes!</a>
+            <button id="logout-button-header" class="snes-button" style="display: none;">Logout</button>
         </div>
     </div>
 </header>
@@ -190,30 +588,51 @@
         <span id="coin-count">99</span>
     </div>
 
-    <!-- User Info Panel -->
-    <div class="user-info-panel" id="user-info-panel" style="display: none;">
-        <h2><span class="star-icon">⭐</span> Welcome Back! <span class="star-icon">⭐</span></h2>
+    <!-- Welcome Message -->
+    <div class="welcome-message" id="welcome-message" style="display: none;">
+        Welcome Back!
+        <span class="verified-badge" id="verified-badge"></span>
+    </div>
 
-        <div class="info-section">
-            <div class="info-row">
-                <span class="info-label">Email:</span>
-                <span class="info-value" id="user-email">Loading...</span>
+    <!-- Interactive Boxes -->
+    <div class="interactive-boxes">
+        <div class="info-box disabled">
+            <div class="box-icon">?</div>
+            <span class="box-label"></span>
+        </div>
+        <div class="info-box disabled">
+            <div class="box-icon">?</div>
+            <span class="box-label"></span>
+        </div>
+        <div class="info-box active" data-title="Game Analyzer" data-content="Analyze and track your gaming statistics and performance." data-action="#">
+            <div class="box-icon">?</div>
+            <span class="box-label">game-analyzer</span>
+        </div>
+        <div class="info-box disabled">
+            <div class="box-icon">?</div>
+            <span class="box-label"></span>
+        </div>
+        <div class="info-box disabled">
+            <div class="box-icon">?</div>
+            <span class="box-label"></span>
+        </div>
+    </div>
+
+    <!-- Mario-style Pop-up -->
+    <div id="info-popup" class="info-popup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3 id="popup-title">Title</h3>
+                <button class="popup-close">×</button>
             </div>
-            <div class="info-row">
-                <span class="info-label">Username:</span>
-                <span class="info-value" id="user-username">Loading...</span>
+            <div class="popup-body">
+                <p id="popup-text">Content goes here</p>
             </div>
-            <div class="info-row">
-                <span class="info-label">Verified:</span>
-                <span class="info-value" id="user-verified">Loading...</span>
+            <div class="popup-footer">
+                <button id="popup-go" class="snes-button">Go</button>
+                <button id="popup-cancel" class="snes-button">Cancel</button>
             </div>
         </div>
-
-        <div class="api-status loading" id="api-status">
-            <span>🔄 Connecting to API...</span>
-        </div>
-
-        <button id="logout-button" class="snes-button logout-btn">Logout</button>
     </div>
 
     <div id="mobile-controls">
@@ -371,19 +790,95 @@
         const userInfo = getUserInfoFromToken(idToken);
 
         document.getElementById('loading-container').style.display = 'none';
-        document.getElementById('user-info-panel').style.display = 'block';
-        document.getElementById('user-email').textContent = userInfo.email;
-        document.getElementById('user-username').textContent = userInfo.username;
-        document.getElementById('user-verified').textContent = userInfo.emailVerified ? '✅ Yes' : '❌ No';
+
+        // Update header with user info
+        document.getElementById('user-info-header').style.display = 'flex';
+        document.getElementById('header-email').textContent = userInfo.email;
+        document.getElementById('header-username').textContent = userInfo.username;
+        document.getElementById('logout-button-header').style.display = 'inline-block';
+
+        // Show welcome message
+        document.getElementById('welcome-message').style.display = 'block';
+        const verifiedBadge = document.getElementById('verified-badge');
+        verifiedBadge.textContent = userInfo.emailVerified ? '✅' : '⚠️';
+        verifiedBadge.title = userInfo.emailVerified ? 'Email Verified' : 'Email Not Verified';
 
         // Setup logout button
-        document.getElementById('logout-button').addEventListener('click', logout);
+        document.getElementById('logout-button-header').addEventListener('click', logout);
 
         // Load user info from API
         loadApiUserInfo();
 
         // Initialize the Logged class for animations
         new Logged();
+
+        // Setup interactive boxes
+        setupInteractiveBoxes();
+    }
+
+    // Setup interactive boxes
+    function setupInteractiveBoxes() {
+        const boxes = document.querySelectorAll('.info-box.active');
+        const popup = document.getElementById('info-popup');
+        const popupTitle = document.getElementById('popup-title');
+        const popupText = document.getElementById('popup-text');
+        const popupGo = document.getElementById('popup-go');
+        const popupCancel = document.getElementById('popup-cancel');
+        const popupClose = document.querySelector('.popup-close');
+
+        console.log('Active boxes found:', boxes.length);
+
+        let currentAction = null;
+
+        boxes.forEach((box, index) => {
+            console.log('Setting up box', index, box);
+            box.addEventListener('click', (e) => {
+                console.log('Box clicked!', box);
+                e.stopPropagation();
+
+                const title = box.getAttribute('data-title');
+                const content = box.getAttribute('data-content');
+                const action = box.getAttribute('data-action');
+
+                console.log('Title:', title, 'Content:', content);
+
+                popupTitle.textContent = title;
+                popupText.textContent = content;
+                currentAction = action;
+
+                popup.style.display = 'flex';
+            });
+        });
+
+        if (popupGo) {
+            popupGo.addEventListener('click', () => {
+                if (currentAction && currentAction !== '#') {
+                    window.open(currentAction, '_blank');
+                }
+                popup.style.display = 'none';
+            });
+        }
+
+        if (popupCancel) {
+            popupCancel.addEventListener('click', () => {
+                popup.style.display = 'none';
+            });
+        }
+
+        if (popupClose) {
+            popupClose.addEventListener('click', () => {
+                popup.style.display = 'none';
+            });
+        }
+
+        // Close on background click
+        if (popup) {
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        }
     }
 
     // Show error
